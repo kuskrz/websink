@@ -1,7 +1,7 @@
 mod handles;
 mod router;
 
-use crate::router::{init_router, RequestConfig};
+use crate::router::init_router;
 
 use clap::{ArgAction, Parser};
 
@@ -37,6 +37,14 @@ struct Args {
     /// response file path
     #[arg(short, long)]
     response: Option<String>,
+}
+
+#[derive(Clone)]
+struct RequestConfig {
+    pub bytes: usize,
+    pub sink: bool,
+    pub noout: bool,
+    pub response: Option<String>,
 }
 
 #[tokio::main]

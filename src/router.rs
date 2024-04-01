@@ -1,15 +1,8 @@
 use crate::handles::{empty, fullg, fullp};
+use crate::RequestConfig;
 
 use axum::routing::get;
 use axum::{routing::post, Router};
-
-#[derive(Clone)]
-pub struct RequestConfig {
-    pub bytes: usize,
-    pub sink: bool,
-    pub noout: bool,
-    pub response: Option<String>,
-}
 
 pub fn init_router(args: RequestConfig) -> Router {
     if args.sink {
