@@ -2,6 +2,7 @@ use std::fs;
 
 use axum::body;
 use axum::extract::State;
+use axum::routing::get;
 use axum::{extract::Request, routing::post, Router};
 use clap::{ArgAction, Parser};
 
@@ -73,14 +74,15 @@ async fn main() {
 fn init_router(args: RequestConfig) -> Router {
     if args.sink {
         println!("Sink mode");
-        return Router::new().route("/", post(empty_handler));
+        return Router::new().route("/", post(empty)).route("/", get(empty));
     }
     Router::new()
-        .route("/", post(full_request))
+        .route("/", post(fullp))
+        .route("/", get(fullg))
         .with_state(args)
 }
 
-async fn full_request(State(req_cfg): State<RequestConfig>, request: Request) -> String {
+async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> String {
     if !req_cfg.noout {
         println!("========== HEADER ==========");
         for (key, val) in request.headers().into_iter() {
@@ -104,4 +106,15 @@ async fn full_request(State(req_cfg): State<RequestConfig>, request: Request) ->
     return_string
 }
 
-async fn empty_handler() {}
+async fn fullg(State(req_cfg): State<RequestConfig>) -> String {
+    let mut return_string = String::from("");
+    if let Some(file_name) = req_cfg.response {
+        if let Ok(file_content) = fs::read_to_string(file_name.to_owned()) {
+            return_string = file_content;
+        }
+    }
+
+    return_string
+}
+
+async fn empty() {}
