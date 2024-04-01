@@ -67,13 +67,14 @@ async fn main() {
 
     let app = init_router(request_config);
     let socket = String::from("0.0.0.0:") + &String::from(args.port.to_string());
+    println!("Listening on {}", socket);
     let listener = tokio::net::TcpListener::bind(socket).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
 
 fn init_router(args: RequestConfig) -> Router {
     if args.sink {
-        println!("Sink mode");
+        print!("Sink mode! ");
         return Router::new().route("/", post(empty)).route("/", get(empty));
     }
     Router::new()
