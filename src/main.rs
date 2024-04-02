@@ -59,8 +59,9 @@ async fn main() {
     };
 
     let app = init_router(request_config);
-    let socket = String::from("0.0.0.0:") + &String::from(args.port.to_string());
+    let socket = String::from("0.0.0.0:") + &args.port.to_string();
     println!("Listening on {}", socket);
+    // unwrap - no sense to start without socket and server
     let listener = tokio::net::TcpListener::bind(socket).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }

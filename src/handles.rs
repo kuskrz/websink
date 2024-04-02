@@ -13,15 +13,16 @@ pub async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> St
         }
 
         println!("=========== BODY ===========");
-        let body = body::to_bytes(request.into_body(), req_cfg.bytes)
-            .await
-            .unwrap();
-        println!("{:?}", body);
+        let body_result = body::to_bytes(request.into_body(), req_cfg.bytes).await;
+        match body_result {
+            Ok(body) => println!("{:?}", body),
+            Err(e) => println!("{}", e),
+        }
     }
 
     let mut return_string = String::from("");
     if let Some(file_name) = req_cfg.response {
-        if let Ok(file_content) = fs::read_to_string(file_name.to_owned()) {
+        if let Ok(file_content) = fs::read_to_string(file_name) {
             return_string = file_content;
         }
     }
@@ -32,7 +33,7 @@ pub async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> St
 pub async fn fullg(State(req_cfg): State<RequestConfig>) -> String {
     let mut return_string = String::from("");
     if let Some(file_name) = req_cfg.response {
-        if let Ok(file_content) = fs::read_to_string(file_name.to_owned()) {
+        if let Ok(file_content) = fs::read_to_string(file_name) {
             return_string = file_content;
         }
     }
