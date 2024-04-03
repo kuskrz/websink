@@ -41,10 +41,10 @@ struct Args {
 
 #[derive(Clone)]
 struct RequestConfig {
-    pub bytes: usize,
-    pub sink: bool,
-    pub noout: bool,
-    pub response: Option<String>,
+    bytes: usize,
+    sink: bool,
+    noout: bool,
+    response: Option<String>,
 }
 
 #[tokio::main]
