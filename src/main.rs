@@ -3,6 +3,8 @@ mod router;
 
 use crate::router::init_router;
 
+use std::fs;
+
 use clap::{ArgAction, Parser};
 
 #[derive(Parser, Debug)]
@@ -44,18 +46,28 @@ struct RequestConfig {
     bytes: usize,
     sink: bool,
     noout: bool,
-    response: Option<String>,
+    response_body: String,
 }
 
 #[tokio::main]
 async fn main() {
+    print!("\u{1f980} ");
     let args = Args::parse();
+    let mut response = "".to_owned();
+
+    if !args.sink {
+        if let Some(file_name) = args.response {
+            if let Ok(fc) = fs::read_to_string(file_name) {
+                response = fc;
+            }
+        }
+    }
 
     let request_config = RequestConfig {
         bytes: args.bytes,
         sink: args.sink,
         noout: args.noout,
-        response: args.response,
+        response_body: response,
     };
 
     let app = init_router(request_config);
