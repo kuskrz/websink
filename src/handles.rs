@@ -22,7 +22,14 @@ pub async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> St
     req_cfg.response_body
 }
 
-pub async fn fullg(State(req_cfg): State<RequestConfig>) -> String {
+pub async fn fullg(State(req_cfg): State<RequestConfig>, request: Request) -> String {
+    if !req_cfg.noout {
+        println!("========== HEADER ==========");
+        for (key, val) in request.headers().into_iter() {
+            println!("{}:{:?}", key, val);
+        }
+    }
+
     req_cfg.response_body
 }
 
