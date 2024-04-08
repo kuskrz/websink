@@ -12,5 +12,7 @@ pub fn init_router(args: RequestConfig) -> Router {
     Router::new()
         .route("/", post(fullp))
         .route("/", get(fullg))
+        .route("/*path", post(fullp))
+        .route("/*path", get(fullg))
         .with_state(args)
 }

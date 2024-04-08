@@ -5,6 +5,9 @@ use axum::extract::Request;
 use axum::extract::State;
 
 pub async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> String {
+    println!("----------------------------------------");
+    println!("URI: {}", request.uri());
+    println!("METHOD: {}", request.method());
     if !req_cfg.noout {
         println!("========== HEADER ==========");
         for (key, val) in request.headers().into_iter() {
@@ -18,18 +21,21 @@ pub async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> St
             Err(e) => println!("{}", e),
         }
     }
-
+    println!("============================");
     req_cfg.response_body
 }
 
 pub async fn fullg(State(req_cfg): State<RequestConfig>, request: Request) -> String {
+    println!("----------------------------------------");
+    println!("URI: {}", request.uri());
+    println!("METHOD: {}", request.method());
     if !req_cfg.noout {
         println!("========== HEADER ==========");
         for (key, val) in request.headers().into_iter() {
             println!("{}:{:?}", key, val);
         }
     }
-
+    println!("============================");
     req_cfg.response_body
 }
 
