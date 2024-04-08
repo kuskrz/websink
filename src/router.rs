@@ -7,7 +7,11 @@ use axum::{routing::post, Router};
 pub fn init_router(args: RequestConfig) -> Router {
     if args.sink {
         print!("Sink mode! ");
-        return Router::new().route("/", post(empty)).route("/", get(empty));
+        return Router::new()
+            .route("/", post(empty))
+            .route("/", get(empty))
+            .route("/*path", post(empty))
+            .route("/*path", get(empty));
     }
     Router::new()
         .route("/", post(fullp))
