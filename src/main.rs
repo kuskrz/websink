@@ -3,8 +3,9 @@ mod router;
 
 use crate::router::init_router;
 
-use std::fs;
+use std::{fs, net::SocketAddr, path::PathBuf};
 
+use axum_server::tls_rustls::RustlsConfig;
 use clap::{ArgAction, Parser};
 
 #[derive(Parser, Debug)]
@@ -49,6 +50,12 @@ struct RequestConfig {
     response_body: String,
 }
 
+#[derive(Clone, Copy)]
+struct Ports {
+    http: u16,
+    https: u16,
+}
+
 #[tokio::main]
 async fn main() {
     print!("\u{1f980} ");
@@ -71,9 +78,32 @@ async fn main() {
     };
 
     let app = init_router(request_config);
-    let socket = String::from("0.0.0.0:") + &args.port.to_string();
+    /*  let socket = String::from("0.0.0.0:") + &args.port.to_string();
     println!("Listening on {}", socket);
     // unwrap - no sense to start without socket and server
     let listener = tokio::net::TcpListener::bind(socket).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app).await.unwrap(); */
+
+    // https://github.com/tokio-rs/axum/blob/main/examples/tls-rustls/src/main.rs
+    let ports = Ports {
+        http: 7878,
+        https: 3000,
+    };
+
+    let config = RustlsConfig::from_pem_file(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("self_signed_certs")
+            .join("cert.pem"),
+        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("self_signed_certs")
+            .join("key.pem"),
+    )
+    .await
+    .unwrap();
+
+    let addr = SocketAddr::from(([127, 0, 0, 1], ports.https));
+    axum_server::bind_rustls(addr, config)
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 }
