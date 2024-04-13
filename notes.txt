@@ -1,0 +1,13 @@
+openssl genrsa -out websink.key 2048
+openssl req -new -key websink.key -out websink.csr
+openssl x509 -req -in websink.csr -signkey websink.key -out websink.crt -days 365 -sha256 -extfile websink.v3.config
+openssl x509 -in websink.crt -text
+
+websink.v3.config:
+
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+basicConstraints       = CA:TRUE
+keyUsage               = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment, keyAgreement, keyCertSign
+subjectAltName         = DNS:websink, DNS:localhost
+issuerAltName          = issuer:copy
