@@ -1,9 +1,11 @@
 mod handles;
+mod response;
 mod router;
 
+use crate::response::parse_response;
 use crate::router::init_router;
 
-use std::{fs, net::SocketAddr, path::PathBuf, process};
+use std::{net::SocketAddr, path::PathBuf, process};
 
 use axum_server::tls_rustls::RustlsConfig;
 use clap::{ArgAction, Parser};
@@ -56,18 +58,25 @@ struct RequestConfig {
     sink: bool,
     noout: bool,
     response_body: String,
+    response_headers: Vec<(String, String)>,
 }
 
 #[tokio::main]
 async fn main() {
-    println!("\u{1f980} ");
+    print!("\u{1f980} ");
     let args = Args::parse();
-    let mut response = "".to_owned();
+    let mut responseb = "".to_owned();
+    let mut responseh = Vec::new();
 
     if !args.sink {
         if let Some(file_name) = args.response {
-            if let Ok(fc) = fs::read_to_string(file_name) {
-                response = fc;
+            let (response_body_toml, response_headers_toml) = parse_response(&file_name[..]);
+            responseb = response_body_toml.unwrap_or_default();
+            if let Some(h) = response_headers_toml {
+                responseh = h
+                    .into_iter()
+                    .map(|x| (x.0, String::from(x.1.as_str().unwrap_or_default())))
+                    .collect();
             }
         }
     }
@@ -76,14 +85,15 @@ async fn main() {
         bytes: args.bytes,
         sink: args.sink,
         noout: args.noout,
-        response_body: response,
+        response_body: responseb,
+        response_headers: responseh,
     };
 
     let app = init_router(request_config);
 
     if args.key.is_none() || args.cert.is_none() {
         let socket = String::from("0.0.0.0:") + &args.port.to_string();
-        println!("Listening on {}", socket);
+        println!("Listening on http://{}", socket);
         // unwrap - no sense to start without socket and server
         let listener = tokio::net::TcpListener::bind(socket).await.unwrap();
         axum::serve(listener, app).await.unwrap();
@@ -107,6 +117,7 @@ async fn main() {
             .unwrap();
 
         let addr = SocketAddr::from(([0, 0, 0, 0], args.port));
+        println!("Listening on https://0.0.0.0:{}", args.port.to_string());
         axum_server::bind_rustls(addr, config)
             .serve(app.into_make_service())
             .await
