@@ -1,10 +1,13 @@
 use crate::RequestConfig;
 
 use axum::body;
+use axum::body::Body;
 use axum::extract::Request;
 use axum::extract::State;
+use axum::http::StatusCode;
+use axum::response::Response;
 
-pub async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> String {
+pub async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> Response {
     println!("----------------------------------------");
     println!("URI: {}", request.uri());
     println!("METHOD: {}", request.method());
@@ -22,10 +25,23 @@ pub async fn fullp(State(req_cfg): State<RequestConfig>, request: Request) -> St
         }
     }
     println!("============================");
-    req_cfg.response_body
+    let mut builder = Response::builder().status(StatusCode::OK);
+    for (key, val) in req_cfg.response_headers {
+        builder = builder.header(&key[..], &val[..]);
+    }
+    match builder.body(Body::from(req_cfg.response_body)) {
+        Ok(result) => return result,
+        Err(e) => {
+            println!("Cannot construct response: {}", e);
+            return Response::builder()
+                .status(StatusCode::OK)
+                .body(Body::from(""))
+                .unwrap();
+        }
+    }
 }
 
-pub async fn fullg(State(req_cfg): State<RequestConfig>, request: Request) -> String {
+pub async fn fullg(State(req_cfg): State<RequestConfig>, request: Request) -> Response {
     println!("----------------------------------------");
     println!("URI: {}", request.uri());
     println!("METHOD: {}", request.method());
@@ -36,7 +52,20 @@ pub async fn fullg(State(req_cfg): State<RequestConfig>, request: Request) -> St
         }
     }
     println!("============================");
-    req_cfg.response_body
+    let mut builder = Response::builder().status(StatusCode::OK);
+    for (key, val) in req_cfg.response_headers {
+        builder = builder.header(&key[..], &val[..]);
+    }
+    match builder.body(Body::from(req_cfg.response_body)) {
+        Ok(result) => return result,
+        Err(e) => {
+            println!("Cannot construct response: {}", e);
+            return Response::builder()
+                .status(StatusCode::OK)
+                .body(Body::from(""))
+                .unwrap();
+        }
+    }
 }
 
 pub async fn empty() {}

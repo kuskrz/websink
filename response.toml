@@ -1,0 +1,16 @@
+body = '''
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>TEST</h1>
+<p>Response</p>
+
+</body>
+</html>
+'''
+
+[headers]
+accept-encoding = 'gzip, deflate, br'
+sec-fetch-dest = 'image'
+Krzysztof = 'Kuś'
