@@ -117,7 +117,7 @@ async fn main() {
             .unwrap();
 
         let addr = SocketAddr::from(([0, 0, 0, 0], args.port));
-        println!("Listening on https://0.0.0.0:{}", args.port.to_string());
+        println!("Listening on https://0.0.0.0:{}", args.port);
         axum_server::bind_rustls(addr, config)
             .serve(app.into_make_service())
             .await

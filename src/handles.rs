@@ -32,13 +32,13 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         builder = builder.header(&key[..], &val[..]);
     }
     match builder.body(Body::from(req_cfg.response_body)) {
-        Ok(result) => return result,
+        Ok(result) => result,
         Err(e) => {
             println!("Cannot construct response: {}", e);
-            return Response::builder()
+            Response::builder()
                 .status(StatusCode::OK)
                 .body(Body::from(""))
-                .unwrap();
+                .unwrap()
         }
     }
 }
