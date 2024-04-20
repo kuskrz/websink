@@ -1,4 +1,4 @@
-use crate::handles::{empty, fullg, fullp};
+use crate::handles::{empty, full};
 use crate::RequestConfig;
 
 use axum::routing::get;
@@ -14,9 +14,9 @@ pub fn init_router(args: RequestConfig) -> Router {
             .route("/*path", get(empty));
     }
     Router::new()
-        .route("/", post(fullp))
-        .route("/", get(fullg))
-        .route("/*path", post(fullp))
-        .route("/*path", get(fullg))
+        .route("/", post(full))
+        .route("/", get(full))
+        .route("/*path", post(full))
+        .route("/*path", get(full))
         .with_state(args)
 }
