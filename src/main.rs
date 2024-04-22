@@ -63,7 +63,6 @@ struct RequestConfig {
 
 #[tokio::main]
 async fn main() {
-    print!("\u{1f980} ");
     let args = Args::parse();
     let mut responseb = "".to_owned();
     let mut responseh = Vec::new();
@@ -93,7 +92,7 @@ async fn main() {
 
     if args.key.is_none() || args.cert.is_none() {
         let socket = String::from("0.0.0.0:") + &args.port.to_string();
-        println!("Listening on http://{}", socket);
+        println!("Listening on http://{} \u{1f980}", socket);
         // unwrap - no sense to start without socket and server
         let listener = tokio::net::TcpListener::bind(socket).await.unwrap();
         axum::serve(listener, app).await.unwrap();
@@ -117,7 +116,7 @@ async fn main() {
             .unwrap();
 
         let addr = SocketAddr::from(([0, 0, 0, 0], args.port));
-        println!("Listening on https://0.0.0.0:{}", args.port);
+        println!("Listening on https://0.0.0.0:{} \u{1f980}", args.port);
         axum_server::bind_rustls(addr, config)
             .serve(app.into_make_service())
             .await
