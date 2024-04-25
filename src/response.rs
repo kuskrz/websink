@@ -1,3 +1,4 @@
+use colored::Colorize;
 use serde::Deserialize;
 use std::fs;
 use toml::{map::Map, Table, Value};
@@ -16,7 +17,7 @@ pub fn parse_response(response_file: &str) -> (Option<String>, Option<Map<String
                 return (Some(response_toml.body), Some(response_toml.headers));
             }
             Err(e) => {
-                println!("Cannot parse {} : {}", response_file, e);
+                println!("{}: Cannot parse {} : {}", "ERROR".red(), response_file, e);
                 return (None, None);
             }
         }

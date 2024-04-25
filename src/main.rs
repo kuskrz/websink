@@ -9,6 +9,7 @@ use std::{net::SocketAddr, path::PathBuf, process};
 
 use axum_server::tls_rustls::RustlsConfig;
 use clap::{ArgAction, Parser};
+use colored::Colorize;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -101,13 +102,13 @@ async fn main() {
         let key = args.key.expect("key not set");
         let key_file = PathBuf::from(key);
         if !key_file.exists() {
-            println!("key file does not exist");
+            println!("{}: key file does not exist", "ERROR".red());
             process::exit(2);
         }
         let cert = args.cert.expect("cet not set");
         let cert_file = PathBuf::from(cert);
         if !cert_file.exists() {
-            println!("cert file does not exist");
+            println!("{}: cert file does not exist", "ERROR".red());
             process::exit(2);
         }
 

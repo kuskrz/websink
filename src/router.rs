@@ -3,10 +3,11 @@ use crate::RequestConfig;
 
 use axum::routing::get;
 use axum::{routing::post, Router};
+use colored::Colorize;
 
 pub fn init_router(args: RequestConfig) -> Router {
     if args.sink {
-        print!("Sink mode! ");
+        print!("{} ", "Sink mode!".yellow());
         return Router::new()
             .route("/", post(empty))
             .route("/", get(empty))
