@@ -1,7 +1,6 @@
 use crate::RequestConfig;
 
-use axum::body;
-use axum::body::Body;
+use axum::body::{Body, to_bytes};
 use axum::extract::Request;
 use axum::extract::State;
 use axum::http::Method;
@@ -19,7 +18,7 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         }
         if request.method() == Method::POST {
             println!("{}:", "BODY".green());
-            let body_result = body::to_bytes(request.into_body(), req_cfg.bytes).await;
+            let body_result = to_bytes(request.into_body(), req_cfg.bytes).await;
             match body_result {
                 Ok(body) => println!("{:?}", body),
                 Err(e) => println!("{}", e),
