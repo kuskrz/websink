@@ -1,8 +1,9 @@
 rust_sources := src/*.rs
 #rust_sources := src/*.rs anotherdir/*.rs
 
-install: target/release/websink target/x86_64-pc-windows-gnu/release/websink.exe
+copy.timestamp: target/release/websink target/x86_64-pc-windows-gnu/release/websink.exe
 	cp $? install/
+	touch copy.timestamp
 
 target/release/websink: $(rust_sources) Cargo.toml
 	cargo build --release
