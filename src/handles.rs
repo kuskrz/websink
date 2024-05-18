@@ -1,6 +1,6 @@
 use crate::RequestConfig;
 
-use axum::body::{Body, to_bytes};
+use axum::body::{to_bytes, Body};
 use axum::extract::Request;
 use axum::extract::State;
 use axum::http::Method;
