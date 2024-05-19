@@ -1,6 +1,7 @@
 rust_sources := src/*.rs
 #rust_sources := src/*.rs anotherdir/*.rs
 cargo := Cargo.toml Cargo.lock
+
 install: copy.timestamp
 	@echo "Done"
 
