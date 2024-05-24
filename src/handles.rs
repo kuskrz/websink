@@ -9,23 +9,24 @@ use axum::response::Response;
 use colored::Colorize;
 
 pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Response {
-    println!("{}: {}", "URI".green(), request.uri());
-    println!("{}: {}", "METHOD".green(), request.method());
+    println!("{}", "REQUEST BEGIN".bold());
+    println!(" {}: {}", "URI".green(), request.uri());
+    println!(" {}: {}", "METHOD".green(), request.method());
     if !req_cfg.noout {
-        println!("{}:", "HEADER".green());
+        println!(" {}:", "HEADER".green());
         for (key, val) in request.headers().into_iter() {
-            println!("{}:{:?}", key, val);
+            println!("  {}:{:?}", key, val);
         }
         if request.method() == Method::POST {
-            println!("{}:", "BODY".green());
+            println!(" {}:", "BODY".green());
             let body_result = to_bytes(request.into_body(), req_cfg.bytes).await;
             match body_result {
-                Ok(body) => println!("{:?}", body),
+                Ok(body) => println!("  {:?}", body),
                 Err(e) => println!("{}", e),
             }
         }
     }
-    println!("----------------------------------------");
+    println!("{}\n", "REQUEST END".bold());
     let mut builder = Response::builder().status(StatusCode::OK);
     for (key, val) in req_cfg.response_headers {
         builder = builder.header(&key[..], &val[..]);
