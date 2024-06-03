@@ -15,9 +15,9 @@ target/release/websink: $(rust_sources) $(cargo)
 	cp target/release/websink install/linux-gnu
 	echo "Build for GNU Linux"
 
-target/x86_64-unknown-linux-musl/release/websink: $(rust_sources) $(cargo)
+target/x86_64-unknown-linux-musl/release/websink_static: $(rust_sources) $(cargo)
 	cargo build --release --target x86_64-unknown-linux-musl
-	cp target/x86_64-unknown-linux-musl/release/websink install/linux-musl
+	cp target/x86_64-unknown-linux-musl/release/websink install/linux-musl/websink_static
 	echo "Build for MUSL Linux"
 
 target/x86_64-pc-windows-gnu/release/websink.exe: $(rust_sources) $(cargo)
@@ -28,6 +28,6 @@ target/x86_64-pc-windows-gnu/release/websink.exe: $(rust_sources) $(cargo)
 clean:
 	cargo clean
 	if [ -f install/linux-gnu/websink ]; then rm install/linux-gnu/websink; fi
-	if [ -f install/linux-musl/websink ]; then rm install/linux-musl/websink; fi
+	if [ -f install/linux-musl/websink_static ]; then rm install/linux-musl/websink_static; fi
 	if [ -f install/windows/websink.exe ]; then rm install/windows/websink.exe; fi
 	echo "Cleaned"
