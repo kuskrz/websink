@@ -21,7 +21,7 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
             println!(" {}:", "BODY".green());
             let body_result = to_bytes(request.into_body(), req_cfg.bytes).await;
             match body_result {
-                Ok(body) => println!("  {:?}", body),
+                Ok(body) => println!("  {}", String::from_utf8_lossy(body.as_ref())),
                 Err(e) => println!("{}", e),
             }
         }
