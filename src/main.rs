@@ -26,15 +26,6 @@ struct Args {
     #[arg(short = 'c', long = "cert")]
     cert: Option<String>,
 
-    /// sink mode
-    #[arg(
-        short = 's',
-        long = "sink",
-        action(ArgAction::SetTrue),
-        default_value_t = false
-    )]
-    sink: bool,
-
     /// do not produce stdout
     #[arg(
         short = 'n',
@@ -51,6 +42,19 @@ struct Args {
     /// response file path
     #[arg(short, long)]
     response: Option<String>,
+
+    /// additional response delay in ms, max 60000
+    #[arg(short, long, default_value_t = 0)]
+    delay: u16,
+
+    /// sink mode - do nothing, respond with 200, other options ignored
+    #[arg(
+        short = 's',
+        long = "sink",
+        action(ArgAction::SetTrue),
+        default_value_t = false
+    )]
+    sink: bool,
 }
 
 #[derive(Clone)]
@@ -60,6 +64,7 @@ struct RequestConfig {
     noout: bool,
     response_body: String,
     response_headers: Vec<(String, String)>,
+    delay: u16,
 }
 
 #[tokio::main]
@@ -87,6 +92,7 @@ async fn main() {
         noout: args.noout,
         response_body: responseb,
         response_headers: responseh,
+        delay: args.delay,
     };
 
     let app = init_router(request_config);

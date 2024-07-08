@@ -7,6 +7,7 @@ use axum::http::Method;
 use axum::http::StatusCode;
 use axum::response::Response;
 use colored::Colorize;
+use tokio::time::{sleep, Duration};
 
 pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Response {
     println!("{}", "REQUEST BEGIN".bold());
@@ -26,7 +27,15 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
             }
         }
     }
+
+    if req_cfg.delay > 0 && req_cfg.delay < 60000 {
+        println!(" {}: {}ms", "DELAY BEGIN".yellow(), req_cfg.delay);
+        sleep(Duration::from_millis(req_cfg.delay as u64)).await;
+        println!(" {}", "DELAY END".yellow());
+    }
+
     println!("{}\n", "REQUEST END".bold());
+
     let mut builder = Response::builder().status(StatusCode::OK);
     for (key, val) in req_cfg.response_headers {
         builder = builder.header(&key[..], &val[..]);
