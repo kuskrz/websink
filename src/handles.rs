@@ -22,10 +22,25 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
             println!(" {}:", "BODY".green());
             let body_result = to_bytes(request.into_body(), req_cfg.bytes).await;
             match body_result {
-                Ok(body) => println!("  {}", String::from_utf8_lossy(body.as_ref())),
+                Ok(body) => println!("{}", String::from_utf8_lossy(body.as_ref())),
                 Err(e) => println!("{}", e),
             }
         }
+    }
+
+    if req_cfg.response_headers.len() > 0 {
+        println!(" {}:", "RESPONSE HEADER".bright_green());
+    }
+    let mut builder = Response::builder().status(StatusCode::OK);
+    for (key, val) in req_cfg.response_headers {
+        println!("  {}:{:?}", key, val);
+        builder = builder.header(&key[..], &val[..]);
+    }
+
+    if !req_cfg.response_body.is_empty() {
+        let response_body_to_print = req_cfg.response_body.clone();
+        println!(" {}:", "RESPONSE BODY".bright_green());
+        println!("{}", response_body_to_print);
     }
 
     if req_cfg.delay > 0 && req_cfg.delay < 60000 {
@@ -36,10 +51,6 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
 
     println!("{}\n", "REQUEST END".bold());
 
-    let mut builder = Response::builder().status(StatusCode::OK);
-    for (key, val) in req_cfg.response_headers {
-        builder = builder.header(&key[..], &val[..]);
-    }
     match builder.body(Body::from(req_cfg.response_body)) {
         Ok(result) => result,
         Err(e) => {
