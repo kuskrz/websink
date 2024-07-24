@@ -18,7 +18,7 @@ Options:
   -V, --version              Print version
 ```
 
-Response fiel example response.toml:
+Response file example response.toml:
 ```
 body = '''
 <!DOCTYPE html>
