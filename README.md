@@ -1,5 +1,5 @@
 # websink #
-Playground for axum, a tool that listens for http[s] incoming connections and prints URI, HEADERS, BODY
+An axum playground tool that listens for incoming HTTP and HTTPS connections, printing the URI, headers, and body.
 
 ```
 $ websink -h
