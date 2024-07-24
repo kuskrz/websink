@@ -1,2 +1,39 @@
 # websink #
 Playground for axum, a tool that listens for http[s] incoming connections and prints URI, HEADERS, BODY
+
+```
+$ websink -h
+Usage: websink [OPTIONS]
+
+Options:
+  -p, --port <PORT>          port number [default: 2024]
+  -k, --key <KEY>            key file
+  -c, --cert <CERT>          cert file
+  -n, --noout                do not produce stdout
+  -b, --bytes <BYTES>        body maximum size in bytes [default: 10240]
+  -r, --response <RESPONSE>  response file path
+  -d, --delay <DELAY>        additional response delay in ms, max 60000 [default: 0]
+  -s, --sink                 sink mode - do nothing, respond with 200, other options ignored
+  -h, --help                 Print help
+  -V, --version              Print version
+```
+
+Response fiel example response.toml:
+```
+body = '''
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>TEST</h1>
+<p>Response</p>
+
+</body>
+</html>
+'''
+
+[headers]
+accept-encoding = 'gzip, deflate, br'
+sec-fetch-dest = 'image'
+Krzysztof = 'Kuś'
+```
