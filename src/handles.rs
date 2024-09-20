@@ -28,6 +28,7 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         }
     }
 
+    //----------------------------
     if req_cfg.response_headers.len() > 0 {
         println!(" {}:", "RESPONSE HEADER".bright_green());
     }
@@ -42,7 +43,7 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         println!(" {}:", "RESPONSE BODY".bright_green());
         println!("{}", response_body_to_print);
     }
-
+//-------------------------------------
     if req_cfg.delay > 0 && req_cfg.delay < 60000 {
         println!(" {}: {}ms", "DELAY BEGIN".yellow(), req_cfg.delay);
         sleep(Duration::from_millis(req_cfg.delay as u64)).await;

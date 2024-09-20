@@ -2,7 +2,7 @@ mod handles;
 mod response;
 mod router;
 
-use crate::response::parse_response;
+use crate::response::{parse_response, ResponseTOML};
 use crate::router::init_router;
 
 use std::{net::SocketAddr, path::PathBuf, process};
@@ -62,27 +62,17 @@ struct RequestConfig {
     bytes: usize,
     sink: bool,
     noout: bool,
-    response_body: String,
-    response_headers: Vec<(String, String)>,
+    response_toml: Option<ResponseTOML>,
     delay: u16,
 }
 
 #[tokio::main]
 async fn main() {
     let args = Args::parse();
-    let mut responseb = "".to_owned();
-    let mut responseh = Vec::new();
-
+    let mut responset = None;
     if !args.sink {
         if let Some(file_name) = args.response {
-            let (response_body_toml, response_headers_toml) = parse_response(&file_name[..]);
-            responseb = response_body_toml.unwrap_or_default();
-            if let Some(h) = response_headers_toml {
-                responseh = h
-                    .into_iter()
-                    .map(|x| (x.0, String::from(x.1.as_str().unwrap_or_default())))
-                    .collect();
-            }
+            responset = parse_response(&file_name[..]);
         }
     }
 
@@ -90,8 +80,7 @@ async fn main() {
         bytes: args.bytes,
         sink: args.sink,
         noout: args.noout,
-        response_body: responseb,
-        response_headers: responseh,
+        response_toml: responset,
         delay: args.delay,
     };
 
