@@ -1,16 +1,25 @@
 body = '''
-<!DOCTYPE html>
-<html>
-<body>
-
-<h1>TEST</h1>
-<p>Response</p>
-
-</body>
-</html>
+default
+body
 '''
 
 [headers]
 accept-encoding = 'gzip, deflate, br'
 sec-fetch-dest = 'image'
 Krzysztof = 'Kuś'
+
+[[paths]]
+path = 'path1'
+method = 'GET'
+body = 'body1'
+[paths.headers]
+a = '1'
+b = '2'
+
+[[paths]]
+path = 'path2'
+method = 'GET'
+body = 'body2'
+[paths.headers]
+a = '3'
+b = '4'

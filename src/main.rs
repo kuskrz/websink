@@ -2,7 +2,7 @@ mod handles;
 mod response;
 mod router;
 
-use crate::response::{parse_response, ResponseTOML};
+use crate::response::ResponseTOML;
 use crate::router::init_router;
 
 use std::{net::SocketAddr, path::PathBuf, process};
@@ -62,17 +62,17 @@ struct RequestConfig {
     bytes: usize,
     sink: bool,
     noout: bool,
-    response_toml: Option<ResponseTOML>,
+    response_toml: ResponseTOML,
     delay: u16,
 }
 
 #[tokio::main]
 async fn main() {
     let args = Args::parse();
-    let mut responset = None;
+    let mut response_toml = ResponseTOML::new_empty();
     if !args.sink {
         if let Some(file_name) = args.response {
-            responset = parse_response(&file_name[..]);
+            response_toml = ResponseTOML::parse_response(&file_name[..]);
         }
     }
 
@@ -80,7 +80,7 @@ async fn main() {
         bytes: args.bytes,
         sink: args.sink,
         noout: args.noout,
-        response_toml: responset,
+        response_toml,
         delay: args.delay,
     };
 
