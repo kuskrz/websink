@@ -33,7 +33,10 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
 
     let mut builder = Response::builder().status(StatusCode::OK);
 
-    if let Some(headers) = req_cfg.response_toml.get_headers(&uristr[..], &methstr[..]) {
+    if let Some(headers) = req_cfg
+        .response_toml
+        .get_headers(uristr.as_ref(), methstr.as_ref())
+    {
         println!(" {}:", "RESPONSE HEADER".bright_green());
         for (key, val) in headers {
             println!("  {}:{:?}", key, val);
@@ -41,7 +44,10 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         }
     }
 
-    if let Some(body) = req_cfg.response_toml.get_body(&uristr[..], &methstr[..]) {
+    if let Some(body) = req_cfg
+        .response_toml
+        .get_body(uristr.as_ref(), methstr.as_ref())
+    {
         println!(" {}:", "RESPONSE BODY".bright_green());
         println!("{}", body);
     }
@@ -58,7 +64,10 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         .status(StatusCode::OK)
         .body(Body::from(""))
         .unwrap();
-    if let Some(body) = req_cfg.response_toml.get_body(&uristr[..], &methstr[..]) {
+    if let Some(body) = req_cfg
+        .response_toml
+        .get_body(uristr.as_ref(), methstr.as_ref())
+    {
         match builder.body(Body::from(body)) {
             Ok(result) => response_to_send = result,
             Err(e) => {

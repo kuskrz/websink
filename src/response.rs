@@ -58,7 +58,7 @@ impl ResponseTOML {
                         break;
                     }
                 }
-                return Some(body);
+                Some(body)
             }
             None => None,
         }
@@ -86,7 +86,7 @@ impl ResponseTOML {
                         break;
                     }
                 }
-                return Some(headers);
+                Some(headers)
             }
             None => None,
         }
