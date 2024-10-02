@@ -1,3 +1,4 @@
+mod command;
 mod handles;
 mod response;
 mod router;
@@ -8,54 +9,8 @@ use crate::router::init_router;
 use std::{net::SocketAddr, path::PathBuf, process};
 
 use axum_server::tls_rustls::RustlsConfig;
-use clap::{ArgAction, Parser};
+use clap::Parser;
 use colored::Colorize;
-
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
-struct Args {
-    /// port number
-    #[arg(short = 'p', long = "port", default_value_t = 2024)]
-    port: u16,
-
-    /// key file
-    #[arg(short = 'k', long = "key")]
-    key: Option<String>,
-
-    /// cert file
-    #[arg(short = 'c', long = "cert")]
-    cert: Option<String>,
-
-    /// do not produce stdout
-    #[arg(
-        short = 'n',
-        long = "noout",
-        action(ArgAction::SetTrue),
-        default_value_t = false
-    )]
-    noout: bool,
-
-    /// body maximum size in bytes
-    #[arg(short = 'b', long = "bytes", default_value_t = 10240)]
-    bytes: usize,
-
-    /// response file path
-    #[arg(short, long)]
-    response: Option<String>,
-
-    /// additional response delay in ms, max 60000
-    #[arg(short, long, default_value_t = 0)]
-    delay: u16,
-
-    /// sink mode - do nothing, respond with 200, other options ignored
-    #[arg(
-        short = 's',
-        long = "sink",
-        action(ArgAction::SetTrue),
-        default_value_t = false
-    )]
-    sink: bool,
-}
 
 #[derive(Clone)]
 struct RequestConfig {
@@ -68,7 +23,7 @@ struct RequestConfig {
 
 #[tokio::main]
 async fn main() {
-    let args = Args::parse();
+    let args = command::Args::parse();
     let mut response_toml = ResponseTOML::new_empty();
     if !args.sink {
         if let Some(file_name) = args.response {
