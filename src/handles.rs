@@ -52,7 +52,7 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         println!("{}", body);
     }
 
-    if req_cfg.delay > 0 && req_cfg.delay < 60000 {
+    if req_cfg.delay > 0 && req_cfg.delay <=  86400000{
         println!(" {}: {}ms", "DELAY BEGIN".yellow(), req_cfg.delay);
         sleep(Duration::from_millis(req_cfg.delay as u64)).await;
         println!(" {}", "DELAY END".yellow());

@@ -12,7 +12,7 @@ Options:
   -n, --noout                do not produce stdout
   -b, --bytes <BYTES>        body maximum size in bytes [default: 10240]
   -r, --response <RESPONSE>  response file path
-  -d, --delay <DELAY>        additional response delay in ms, max 60000 [default: 0]
+  -d, --delay <DELAY>        additional response delay in ms, max 86400000 [default: 0]
   -s, --sink                 sink mode - do nothing, respond with 200, other options ignored
   -h, --help                 Print help
   -V, --version              Print version

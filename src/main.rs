@@ -18,7 +18,7 @@ struct RequestConfig {
     sink: bool,
     noout: bool,
     response_toml: ResponseTOML,
-    delay: u16,
+    delay: u32,
 }
 
 #[tokio::main]

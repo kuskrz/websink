@@ -34,7 +34,7 @@ pub struct Args {
 
     /// additional response delay in ms, max 60000
     #[arg(short, long, default_value_t = 0)]
-    pub delay: u16,
+    pub delay: u32,
 
     /// sink mode - do nothing, respond with 200, other options ignored
     #[arg(
