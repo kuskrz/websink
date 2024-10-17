@@ -1,9 +1,9 @@
 mod command;
 mod handles;
-mod response;
+mod responsefile;
 mod router;
 
-use crate::response::ResponseTOML;
+use crate::responsefile::ResponseTOML;
 use crate::router::init_router;
 
 use std::{net::SocketAddr, path::PathBuf, process};

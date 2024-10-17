@@ -31,7 +31,15 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         }
     }
 
-    let mut builder = Response::builder().status(StatusCode::OK);
+    let mut sc = StatusCode::OK;
+    if let Some(rc) = req_cfg
+        .response_toml
+        .get_status_code(uristr.as_ref(), methstr.as_ref())
+    {
+        sc = rc;
+        println!(" {}: {}", "RESPONSE STATUS".bright_green(), sc);
+    }
+    let mut builder = Response::builder().status(sc);
 
     if let Some(headers) = req_cfg
         .response_toml
@@ -52,7 +60,7 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         println!("{}", body);
     }
 
-    if req_cfg.delay > 0 && req_cfg.delay <=  86400000{
+    if req_cfg.delay > 0 && req_cfg.delay <= 86400000 {
         println!(" {}: {}ms", "DELAY BEGIN".yellow(), req_cfg.delay);
         sleep(Duration::from_millis(req_cfg.delay as u64)).await;
         println!(" {}", "DELAY END".yellow());

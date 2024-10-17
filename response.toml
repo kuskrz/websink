@@ -1,3 +1,4 @@
+status = 200
 body = '''
 default
 body
@@ -9,6 +10,7 @@ sec-fetch-dest = 'image'
 Krzysztof = 'Kuś'
 
 [[paths]]
+status = 201
 path = 'path1'
 method = 'GET'
 body = 'body1'
@@ -17,6 +19,7 @@ a = '1'
 b = '2'
 
 [[paths]]
+status = 704
 path = 'path2'
 method = 'GET'
 body = 'body2'
