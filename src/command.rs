@@ -32,7 +32,7 @@ pub struct Args {
     #[arg(short, long)]
     pub response: Option<String>,
 
-    /// additional response delay in ms, max 60000
+    /// additional response delay in ms, max 120000
     #[arg(short, long, default_value_t = 0)]
     pub delay: u32,
 
