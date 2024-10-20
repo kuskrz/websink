@@ -34,6 +34,13 @@ pub fn set_from_env(cmdargs: &mut CmdArgs) {
             cmdargs.response = Some(e);
         }
     }
+    if let Ok(e) = env::var("W_DELAY") {
+        if cmdargs.delay == 0 {
+            if let Ok(v) = e.parse::<u32>() {
+                cmdargs.delay = v;
+            }
+        }
+    }
     if let Ok(_) = env::var("W_SINK") {
         cmdargs.sink = true;
     }
