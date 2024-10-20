@@ -2,7 +2,7 @@ use clap::{ArgAction, Parser};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
-pub struct Args {
+pub struct CmdArgs {
     /// port number
     #[arg(short = 'p', long = "port", default_value_t = 2024)]
     pub port: u16,

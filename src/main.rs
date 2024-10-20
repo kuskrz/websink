@@ -2,9 +2,11 @@ mod command;
 mod handles;
 mod responsefile;
 mod router;
+mod environment;
 
 use crate::responsefile::ResponseTOML;
 use crate::router::init_router;
+use crate::environment::set_from_env;
 
 use std::{net::SocketAddr, path::PathBuf, process};
 
@@ -23,11 +25,12 @@ struct RequestConfig {
 
 #[tokio::main]
 async fn main() {
-    let args = command::Args::parse();
+    let mut args = command::CmdArgs::parse();
+    set_from_env(&mut args);
     let mut response_toml = ResponseTOML::new_empty();
     if !args.sink {
         if let Some(file_name) = args.response {
-            response_toml = ResponseTOML::parse_response(&file_name[..]);
+            response_toml = ResponseTOML::parse_response(file_name.as_ref());
         }
     }
 
