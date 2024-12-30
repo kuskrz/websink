@@ -1,15 +1,16 @@
 [package]
 name = "websink"
-version = "3.0.0"
+version = "3.0.1"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.7.7"
+axum = "0.7.9"
 axum-server = { version = "0.7.1", features = ["tls-rustls"] }
-clap = { version = "4.5.20", features = ["derive"] }
-colored = "2.1.0"
-serde = { version = "1.0.213", features = ["derive"] }
-tokio = { version = "1.41.0", features = ["full"] }
+clap = { version = "4.5.23", features = ["derive"] }
+colored = "2.2.0"
+serde = { version = "1.0.217", features = ["derive"] }
+tokio = { version = "1.42.0", features = ["full"] }
 toml = "0.8.19"
+hashbrown = "0.15.2"
