@@ -13,5 +13,6 @@ colored = "2.2.0"
 serde = { version = "1.0.217", features = ["derive"] }
 tokio = { version = "1.42.0", features = ["full"] }
 toml = "0.8.19"
+# security
 hashbrown = "0.15.2"
 rustls = "0.23.19"
