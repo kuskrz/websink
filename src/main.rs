@@ -1,12 +1,12 @@
 mod command;
+mod environment;
 mod handles;
 mod responsefile;
 mod router;
-mod environment;
 
+use crate::environment::set_from_env;
 use crate::responsefile::ResponseTOML;
 use crate::router::init_router;
-use crate::environment::set_from_env;
 
 use std::{net::SocketAddr, path::PathBuf, process};
 

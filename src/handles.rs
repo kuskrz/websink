@@ -39,25 +39,28 @@ pub async fn full(State(req_cfg): State<RequestConfig>, request: Request) -> Res
         sc = rc;
         println!(" {}: {}", "RESPONSE STATUS".bright_green(), sc);
     }
+
     let mut builder = Response::builder().status(sc);
 
-    if let Some(headers) = req_cfg
-        .response_toml
-        .get_headers(uristr.as_ref(), methstr.as_ref())
-    {
-        println!(" {}:", "RESPONSE HEADER".bright_green());
-        for (key, val) in headers {
-            println!("  {}:{:?}", key, val);
-            builder = builder.header(&key[..], &val[..]);
+    if !req_cfg.noout {
+        if let Some(headers) = req_cfg
+            .response_toml
+            .get_headers(uristr.as_ref(), methstr.as_ref())
+        {
+            println!(" {}:", "RESPONSE HEADER".bright_green());
+            for (key, val) in headers {
+                println!("  {}:{:?}", key, val);
+                builder = builder.header(&key[..], &val[..]);
+            }
         }
-    }
 
-    if let Some(body) = req_cfg
-        .response_toml
-        .get_body(uristr.as_ref(), methstr.as_ref())
-    {
-        println!(" {}:", "RESPONSE BODY".bright_green());
-        println!("{}", body);
+        if let Some(body) = req_cfg
+            .response_toml
+            .get_body(uristr.as_ref(), methstr.as_ref())
+        {
+            println!(" {}:", "RESPONSE BODY".bright_green());
+            println!("{}", body);
+        }
     }
 
     if req_cfg.delay > 0 && req_cfg.delay <= 86400000 {

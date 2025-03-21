@@ -1,5 +1,5 @@
-use std::env;
 use crate::command::CmdArgs;
+use std::env;
 
 pub fn set_from_env(cmdargs: &mut CmdArgs) {
     if let Ok(e) = env::var("W_PORT") {
@@ -19,7 +19,7 @@ pub fn set_from_env(cmdargs: &mut CmdArgs) {
             cmdargs.cert = Some(e);
         }
     }
-    if let Ok(_) = env::var("W_NOOUT") {
+    if env::var("W_NOOUT").is_ok() {
         cmdargs.noout = true;
     }
     if let Ok(e) = env::var("W_BYTES") {
@@ -41,7 +41,7 @@ pub fn set_from_env(cmdargs: &mut CmdArgs) {
             }
         }
     }
-    if let Ok(_) = env::var("W_SINK") {
+    if env::var("W_SINK").is_ok() {
         cmdargs.sink = true;
     }
 }
